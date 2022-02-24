@@ -45,6 +45,32 @@ def cyk(word, terminals, pairs):
     return cyk_rec(word, terminals, pairs, {})
 
 
+def add_node(prod, counts):
+    if prod in counts:
+        counts[prod] += 1
+    else:
+        counts[prod] = 0
+    return f"{prod}{counts[prod]}"
+
+
+def dot_tree_rec(parent, tree, counts):
+    root_name = add_node(tree[0], counts)
+    s = f"\t{root_name} [label=\"{tree[0]}\"]\n"
+
+    if parent:
+        s += f"\t{parent} -> {root_name}\n"
+
+    for child in tree[1:]:
+        s += dot_tree_rec(root_name, child, counts)
+
+    return s
+
+
+def dot_tree(tree):
+    counts = {}
+    return "digraph {\n" + dot_tree_rec(None, tree, counts) + "}"
+
+
 if True:
     terminals = {
         'a': ['A'],
@@ -82,4 +108,5 @@ cache = {}
 res = cyk_rec(word, terminals, pairs, cache)
 
 for tree in res:
-    print(tree)
+    print(dot_tree(tree))
+    break;
