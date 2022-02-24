@@ -107,6 +107,6 @@ else:
 cache = {}
 res = cyk_rec(word, terminals, pairs, cache)
 
-for tree in res:
-    print(dot_tree(tree))
-    break;
+for idx, tree in enumerate(res):
+    with open(f"tree{idx}.dot", 'w') as f:
+        f.write(dot_tree(tree[1]))
