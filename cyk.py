@@ -15,6 +15,7 @@ def cyk_rec(word, terminals, pairs, cache):
     if len(word) == 1:
         char = word[0]
         if char in terminals:
+            print(word, terminals[char])
             return terminals[char]
         else:
             return []
@@ -61,4 +62,20 @@ pairs = {
     ('B', 'B'): ['D'],
 }
 
-print(cyk("baabba", terminals, pairs))
+word = "baabba"
+
+# terminals = {
+#     'a': ['A', 'C'],
+#     'b': ['B'],
+# }
+
+# pairs = {
+#     ('A', 'B'): ['S', 'C'],
+#     ('B', 'A'): ['A'],
+#     ('B', 'C'): ['S'],
+#     ('C', 'C'): ['B'],
+# }
+
+# word = "baaba"
+
+print(cyk(word, terminals, pairs))
