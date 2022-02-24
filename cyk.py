@@ -15,8 +15,8 @@ def cyk_rec(word, terminals, pairs, cache):
     if len(word) == 1:
         char = word[0]
         if char in terminals:
-            print(word, terminals[char])
-            return terminals[char]
+            ret = [(t, (t, char)) for t in terminals[char]]
+            return ret
         else:
             return []
 
@@ -30,13 +30,12 @@ def cyk_rec(word, terminals, pairs, cache):
             cyk_rec(right, terminals, pairs, cache),
         )
 
-        for pair in cart:
-            if pair in pairs:
-                for prod in pairs[pair]:
-                    if prod not in productions:
-                        productions.append(prod)
+        for (left, left_hist), (right, right_hist) in cart:
+            lr = (left, right)
+            if lr in pairs:
+                for prod in pairs[lr]:
+                    productions.append((prod, (prod, left_hist, right_hist)))
 
-    print(word, productions)
     cache[word] = productions
 
     return productions
@@ -46,36 +45,41 @@ def cyk(word, terminals, pairs):
     return cyk_rec(word, terminals, pairs, {})
 
 
-terminals = {
-    'a': ['A'],
-    'b': ['B'],
-}
+if True:
+    terminals = {
+        'a': ['A'],
+        'b': ['B'],
+    }
 
-pairs = {
-    ('A', 'B'): ['S'],
-    ('B', 'A'): ['S'],
-    ('A', 'S'): ['A'],
-    ('B', 'S'): ['B'],
-    ('B', 'C'): ['A'],
-    ('A', 'D'): ['B'],
-    ('A', 'A'): ['C'],
-    ('B', 'B'): ['D'],
-}
+    pairs = {
+        ('A', 'B'): ['S'],
+        ('B', 'A'): ['S'],
+        ('A', 'S'): ['A'],
+        ('B', 'S'): ['B'],
+        ('B', 'C'): ['A'],
+        ('A', 'D'): ['B'],
+        ('A', 'A'): ['C'],
+        ('B', 'B'): ['D'],
+    }
 
-word = "baabba"
+    word = "baabba"
+else:
+    terminals = {
+        'a': ['A', 'C'],
+        'b': ['B'],
+    }
 
-# terminals = {
-#     'a': ['A', 'C'],
-#     'b': ['B'],
-# }
+    pairs = {
+        ('A', 'B'): ['S', 'C'],
+        ('B', 'A'): ['A'],
+        ('B', 'C'): ['S'],
+        ('C', 'C'): ['B'],
+    }
 
-# pairs = {
-#     ('A', 'B'): ['S', 'C'],
-#     ('B', 'A'): ['A'],
-#     ('B', 'C'): ['S'],
-#     ('C', 'C'): ['B'],
-# }
+    word = "baaba"
 
-# word = "baaba"
+cache = {}
+res = cyk_rec(word, terminals, pairs, cache)
 
-print(cyk(word, terminals, pairs))
+for tree in res:
+    print(tree)
