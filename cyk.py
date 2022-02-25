@@ -71,7 +71,7 @@ def dot_tree(tree):
     return "digraph {\n" + dot_tree_rec(None, tree, counts) + "}"
 
 
-if True:
+if False:
     terminals = {
         'a': ['A'],
         'b': ['B'],
